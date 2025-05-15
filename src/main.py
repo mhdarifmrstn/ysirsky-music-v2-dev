@@ -6,6 +6,7 @@ from telegram.ext import (
     filters,
 )
 from handlers.start import start_handler
+from handlers.uptime import uptime_handler
 from handlers.audio import audio_handler
 from handlers.photo import photo_handler
 from handlers.download import download_handler
@@ -19,6 +20,7 @@ token = getenv("BOT_TOKEN")
 app = ApplicationBuilder().token(token).build()
 
 app.add_handler(CommandHandler("start", start_handler))
+app.add_handler(CommandHandler("uptime", uptime_handler))
 app.add_handler(MessageHandler(filters.AUDIO, audio_handler))
 app.add_handler(MessageHandler(filters.TEXT, download_handler))
 app.add_handler(MessageHandler(filters.PHOTO, photo_handler))
@@ -29,6 +31,7 @@ async def set_commands(app):
     await app.bot.set_my_commands(
         [
             ("start", "untuk mulai botnya"),
+            ("uptime", "lihat udah brp lama bot nya jalan"),
         ]
     )
 

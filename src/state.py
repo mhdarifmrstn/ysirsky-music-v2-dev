@@ -2,6 +2,7 @@ from telegram import Audio
 from dataclasses import dataclass
 from typing import Dict
 import io
+import time
 
 
 @dataclass
@@ -20,6 +21,7 @@ class UserState:
 class StateManager:
     def __init__(self):
         self._states: Dict[int, UserState] = {}
+        self.start_time: float = time.time()
 
     def get_state(self, user_id: int):
         return self._states.get(user_id, None)
