@@ -1,38 +1,25 @@
-from extra import extract_song_name
+from spotdl import Spotdl
+from spotdl.types.song import Song
+from typing import Generator
 import os
-import subprocess
-import uuid
+
+# https://github.com/spotDL/spotify-downloader/blob/a3163302c3032e8310dfee4dae5fe2490f0910a4/spotdl/utils/config.py#L296-L297
+s = Spotdl(
+    client_id="5f573c9620494bae87890c0f08a60293",
+    client_secret="212476d9b0f3472eaa762d90b19b0ba8",
+)
 
 
 class Music:
     def __init__(self):
-        self.bin_path = os.path.abspath(".venv") + "/bin"
         self.music_dir = os.path.abspath("music")
 
-    def download(self, query: str):
-        file_name = uuid.uuid4().hex
-        path_without_ext = os.path.join(self.music_dir, file_name)
-        ext = "{output-ext}"
+    def download(self, query: str) -> Generator[str, None, None]:
+        songs: list[Song] = s.search([query])
 
-        command = [
-            self.bin_path + "/spotdl",
-            f'"{query}"',
-            "--output",
-            f"{path_without_ext}." + ext,
-            "--log-level=DEBUG",  # for testing purposes
-        ]
-        print(f"Executing command: {' '.join(command)}")
-        result = subprocess.run(command, capture_output=True, text=True)
-
-        print(f"Command output: {result.stdout}")
-
-        if result.returncode != 0:
-            print(f"Error: {result.stderr}")
-        else:
-            file_path = os.path.join(path_without_ext + ".mp3")
-            print(f"File path: {file_path}")
-
-            return file_path
+        for song in songs:
+            file_path = s.download(song)
+            yield file_path
 
 
 music = Music()

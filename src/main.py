@@ -13,6 +13,13 @@ from handlers.download import download_handler
 from handlers.button import button_handler
 from dotenv import load_dotenv
 from os import getenv
+import nest_asyncio
+
+# currently our spotdl downloader resulting an error
+# RuntimeError: This event loop is already running
+# so we try to solve it by doing this
+# https://stackoverflow.com/a/56434301
+nest_asyncio.apply()
 
 load_dotenv()
 

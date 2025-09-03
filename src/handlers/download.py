@@ -47,14 +47,13 @@ async def download_handler(update: Update, context: ContextTypes):
         return
 
     waiting_message = await update.message.reply_text("Downloading...")
-    file_path = music.download(query)
+
+    for _, file_path in music.download(query):
+        if not file_path:
+            await update.message.reply_text("Error downloading the file.")
+
+        await update.message.reply_audio(
+            audio=open(file_path, "rb"), caption="@YsirskyMusic_Bot"
+        )
 
     await waiting_message.delete()
-
-    if not file_path:
-        await update.message.reply_text("Error downloading the file.")
-        return
-
-    await update.message.reply_audio(
-        audio=open(file_path, "rb"), caption="@YsirskyMusic_Bot"
-    )
