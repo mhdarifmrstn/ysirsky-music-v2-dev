@@ -47,8 +47,14 @@ async def download_handler(update: Update, context: ContextTypes):
         return
 
     waiting_message = await update.message.reply_text("Downloading...")
+    songs = music.search(query)
 
-    for _, file_path in music.download(query):
+    if len(songs) > 1:
+        await waiting_message.edit_text(
+            f"Berhasil mendapatkan {len(songs)} lagu, sedang mendownload.."
+        )
+
+    for _, file_path in music.download(songs):
         if not file_path:
             await update.message.reply_text("Error downloading the file.")
 
@@ -56,4 +62,5 @@ async def download_handler(update: Update, context: ContextTypes):
             audio=open(file_path, "rb"), caption="@YsirskyMusic_Bot"
         )
 
-    await waiting_message.delete()
+    if len(songs) > 1:
+        await update.message.reply_text("Done")

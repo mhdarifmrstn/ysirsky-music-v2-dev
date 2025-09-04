@@ -14,9 +14,13 @@ class Music:
     def __init__(self):
         self.music_dir = os.path.abspath("music")
 
-    def download(self, query: str) -> Generator[str, None, None]:
+    def search(self, query: str) -> list:
+        """Search for songs and return the list of results."""
         songs: list[Song] = s.search([query])
+        return songs
 
+    def download(self, songs: list) -> Generator[str, None, None]:
+        """Download songs one by one, yielding the file path for each."""
         for song in songs:
             file_path = s.download(song)
             yield file_path
