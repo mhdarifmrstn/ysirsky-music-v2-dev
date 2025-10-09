@@ -10,6 +10,6 @@ dependencies = [
     "python-dotenv>=1.1.0",
     "python-telegram-bot>=22.0",
     "ruff>=0.11.9",
-    "spotdl>=4.4.2",
+    "spotdl>=4.4.3",
     "tinytag>=2.1.1",
 ]
